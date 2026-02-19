@@ -29,6 +29,12 @@ class HierarchyFilterTest {
                 new int[]{1, 2, 5, 8, 10, 11},
                 new int[]{0, 1, 1, 0, 1, 2}
         );
+        int leavesCount = Utilities.countLeaves(unfiltered);
+        int parentsCount = Utilities.countParents(unfiltered);
+        int height = Utilities.findHeight(unfiltered);
+
+        System.out.println("leavesCount : " + leavesCount + ", parentsCount : " + parentsCount +
+                ", height of the tree : " + height);
 
         assertEquals(expected.formatString(), actual.formatString());
     }
