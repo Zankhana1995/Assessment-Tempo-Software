@@ -1,6 +1,8 @@
 package hierarchy;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.function.IntPredicate;
 
@@ -34,7 +36,8 @@ public final class HierarchyFilter {
         List<Integer> resultDepths = new ArrayList<>();
 
         // Tracks whether ancestors at each depth were included
-        List<Boolean> keptStack = new ArrayList<>();
+        //List<Boolean> keptStack = new ArrayList<>();
+        Deque<Boolean> keptStack = new ArrayDeque<>();
 
         for (int i = 0; i < hierarchy.size(); i++) {
             int id = hierarchy.nodeId(i);
@@ -42,17 +45,21 @@ public final class HierarchyFilter {
 
             // Adjust ancestor stack when moving up the hierarchy
             while (keptStack.size() > depth) {
-                keptStack.remove(keptStack.size() - 1);
+               // keptStack.remove(keptStack.size() - 1);
+                keptStack.pop();
             }
 
             // A node can only be included if all ancestors were included
-            boolean parentKept = keptStack.stream().allMatch(Boolean::booleanValue);
+           // boolean parentKept = keptStack.stream().allMatch(Boolean::booleanValue);
+            boolean parentKept = keptStack.isEmpty() || keptStack.peek();
+
 
             // Apply predicate to the current node
             boolean keepCurrent = parentKept && predicate.test(id);
 
             // Record decision for descendants
-            keptStack.add(keepCurrent);
+            //keptStack.add(keepCurrent);
+            keptStack.push(keepCurrent);
 
             if (keepCurrent) {
                 resultNodeIds.add(id);
